@@ -9,6 +9,8 @@ export class AppComponent implements OnInit {
   CTC = 1300000;
   VP = 0;
   basicPay = 0;
+  UVP = true;
+  UbasicPay = true;
   netYearSalary = 0;
   title = 'tax';
   monthlyTakeHome = 0;
@@ -17,6 +19,11 @@ export class AppComponent implements OnInit {
   VPF = 0;
   Gratiuty = 0;
   HRA = 0;
+  UEmployeePF = true;
+  UEmployerPF = true;
+  UVPF = true;
+  UGratiuty = true;
+  UHRA = true;
   rentPaid = 0;
   LIC = 0;
   HouseLoanInt = 0;
@@ -26,34 +33,73 @@ export class AppComponent implements OnInit {
   proTax = 200;
   gYTax = 0; gMTax = 0;
   ynet = 0;
-  ;
+  eligibleHRA: number;
+  case1: number;
+  case2: number;
+  case3: number;
+  D80: number;
+  Uothers= true;
+  MedicalInsurence = 0;
+  SeniorCitizen = false;
+  flag =0;
   ngOnInit() {
+    this.SeniorCitizen = false;
+    this.flag =0;  
+    this.CTCFunction();
+  }
+  checkFunction(){
+    this.flag++;
     this.CTCFunction();
   }
   CTCFunction() {
-    this.VP = this.CTC * 0.15;
+    this.VP = this.UVP ? this.CTC * 0.15 : this.VP;
     this.netYearSalary = this.CTC - this.VP;
     this.netMonthlywithoutDeductions = this.netYearSalary / 12;
-    this.basicPay = this.CTC * 0.45 / 12;
-    this.EmployeePF = this.basicPay * 0.12;
-    this.EmployerPF = this.basicPay * 0.12;
-    this.Gratiuty = 0.0481 * this.basicPay;
+    this.basicPay = this.UbasicPay ? this.CTC * 0.45 / 12 : this.basicPay;
+    this.EmployeePF = this.UEmployeePF ? this.basicPay * 0.12 : this.EmployeePF;
+    this.EmployerPF = this.UEmployerPF ? this.basicPay * 0.12 : this.EmployerPF;
+    this.Gratiuty = this.UGratiuty ? 0.048 * this.basicPay : this.Gratiuty;
     this.leftOver = this.netMonthlywithoutDeductions
       - this.EmployeePF
       - this.EmployerPF
       - this.Gratiuty
-      - this.basicPay;
-    this.HRA = 0.4 * this.basicPay;
-    this.monthlyTakeHome = this.basicPay + this.leftOver;
+      - this.basicPay
+      - this.others
+      - this.VPF;
+    this.HRA = this.UHRA ? 0.4 * this.basicPay : this.HRA ;
+    this.monthlyTakeHome = this.basicPay + this.leftOver + this.others;
     // this.taxCalc();
     this.ynet = this.monthlyTakeHome * 12;
-    const D80 = ((this.EmployeePF * 12) + this.LIC);
-    if (D80 < 150000) {
-      this.ynet = this.ynet - 50000 - this.LIC;
+    this.D80 = ((this.EmployeePF * 12) + this.LIC + (this.VPF*12));
+    if (this.D80 < 150000) {
+      this.ynet = this.ynet - 50000 - this.LIC - (this.VPF*12);
     } else {
       this.ynet = this.ynet + (this.EmployeePF * 12) - 50000 - 150000;
     }
-    this.ynet = this.ynet - this.rentPaid;
+    if(this.HouseLoanInt<200000){
+      this.ynet = this.ynet-this.HouseLoanInt;
+    }else{
+      this.ynet = this.ynet-200000;
+    }
+    if(this.MedicalInsurence<25000){
+      this.ynet = this.ynet-this.MedicalInsurence;
+    }else if(this.MedicalInsurence>25000){
+      if(this.flag%2){
+        if(this.MedicalInsurence<50000){
+          this.ynet = this.ynet-this.MedicalInsurence;
+        }else{
+          this.ynet = this.ynet-50000;
+        }
+      }else{
+        this.ynet = this.ynet-25000;
+      }
+    }
+    this.case1 = this.HRA*12;
+    this.case2 = (this.rentPaid*12)-(this.basicPay*12*0.1);
+    
+    this.case3 = this.basicPay*12*0.4;
+    this.eligibleHRA = Math.min(this.case1,this.case2,this.case3)
+     this.ynet = this.ynet - this.eligibleHRA;
 
     // this.ynet = this.ynet - 50000 - this.LIC;
     if (this.ynet <= 250000) {
@@ -78,32 +124,21 @@ export class AppComponent implements OnInit {
     }
 
   }
-
-  VPFunction() {
-
+  
+  reset() {
+    this.UVP = true;
+    this.UbasicPay = true;
+    this.UEmployeePF = true;
+    this.UEmployerPF = true;
+    this.UVPF = true;
+    this.UGratiuty = true;
+    this.UHRA = true;
+    this.CTCFunction();
   }
-  calc() {
-    //this.netYearSalary = this.CTC - this.VP;
-    //this.monthlyTakeHome = this.netYearSalary / 12;
+  VPFunction(vName) {
+    this['U'+vName] = false;
+    this.CTCFunction();
   }
-  taxCalc() {
-    let ynet = this.monthlyTakeHome * 12;
-    let yTax = 0;
-    ynet = ynet - 50000;
-    if (ynet <= 250000) {
-      yTax = 0;
-    }
-    if (ynet > 250000 && ynet <= 500000) {
-      yTax = 0;
-    }
-    if (ynet > 500000 && ynet < 1000000) {
-      yTax = 12500 + (ynet - 500000) * 0.2;
-    }
-    if (ynet > 1000000) {
-      yTax = 12500 + 100000 + (ynet - 1000000) * 0.2;
-    }
-    this.gYTax = yTax;
-    this.gMTax = this.gYTax / 12;
-    return this.gMTax;
-  }
+  
+  
 }

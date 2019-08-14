@@ -1,28 +1,34 @@
 <!--The content below is only a placeholder and can be replaced.-->
 <div style="text-align:center">
-  <h1>Calculator</h1>
+  <h1>Calculator</h1><button (click)=reset();>Reset</button>
   CTC:<input type="number" (keyup)="CTCFunction()" [(ngModel)]="CTC" />
-  VP:<input type="number" (keyup)="VPFunction()" [(ngModel)]="VP" /><br>
-  Basic Pay:<input type="number" (keyup)="calc()" [(ngModel)]="basicPay" /><br>
+  VP:<input type="number" (keyup)="VPFunction('VP')" [(ngModel)]="VP" />
+  Basic Pay:<input type="number" (keyup)="VPFunction('basicPay')" [(ngModel)]="basicPay" /><br>
 
-  EmployeePF:<input type="number" (keyup)="calc()" [(ngModel)]="EmployeePF" />
-  EmployerPF:<input type="number" (keyup)="calc()" [(ngModel)]="EmployerPF" /><br>
-  VPF<input type="number" (keyup)="calc()" [(ngModel)]="VPF" />
-  Gratiuty:<input type="number" (keyup)="calc()" [(ngModel)]="Gratiuty" /><br>
-  HRA Defined:<input type="number" (keyup)="calc()" [(ngModel)]="HRA" />
-  rentPaid:<input type="number" (keyup)="CTCFunction()" [(ngModel)]="rentPaid" /><br>
+  EmployeePF:<input type="number" (keyup)="VPFunction('EmployeePF')" [(ngModel)]="EmployeePF" />
+  EmployerPF:<input type="number" (keyup)="VPFunction('EmployerPF')" [(ngModel)]="EmployerPF" />
+  monthly VPF<input type="number" (keyup)="VPFunction('VPF')" [(ngModel)]="VPF" /><br>
+  Gratiuty:<input type="number" (keyup)="VPFunction('Gratiuty')" [(ngModel)]="Gratiuty" />
+  HRA Defined:<input type="number" (keyup)="VPFunction('HRA')" [(ngModel)]="HRA" />
+  rentPaid per month:<input type="number" (keyup)="CTCFunction()" [(ngModel)]="rentPaid" /><br>
   LIC:<input type="number" (keyup)="CTCFunction()" [(ngModel)]="LIC" />
-  HouseLoanInt:<input type="number" (keyup)="calc()" [(ngModel)]="HouseLoanInt" /><br>
-  others:<input type="number" (keyup)="calc()" [(ngModel)]="others" />
+  HouseLoanInt:<input type="number" (keyup)="CTCFunction()" [(ngModel)]="HouseLoanInt" />
+  others:<input type="number" (keyup)="CTCFunction()" [(ngModel)]="others" /><br>
   leftOver:<input type="number" (keyup)="calc()" [(ngModel)]="leftOver" />
-  gMTax:<input type="number" (keyup)="calc()" [(ngModel)]="gMTax" />
-
+  MedicalInsurence:<input type="number" (keyup)="CTCFunction()" [(ngModel)]="MedicalInsurence" />
+<input (click)="checkFunction()" type="checkbox" value = "true" [(ngModel)]="SeniorCitizen"/>the insurence includes senior citizen 
 
 </div>
 <div>
   Net yearly: <label>{{netYearSalary}}</label><br>
 
   take home: <label>{{monthlyTakeHome}}</label><br>
-  TDS <label>{{gMTax}}</label><br>
+  TDS---<label>{{gMTax}}</label><br>
+  eligibleHRA---|<label>{{eligibleHRA}}</label><br>
+  case1---|<label>{{case1}}</label><br>
+  case2---|<label>{{case2}}</label><br>
+  case3---|<label>{{case3}}</label><br>
+  D80C---|<label>{{150000-D80}}</label><br>
+  {{(monthlyTakeHome+gMTax+Gratiuty+EmployerPF+EmployeePF+VPF)*12+VP}}
 </div>
 <router-outlet></router-outlet>
