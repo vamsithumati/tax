@@ -29,6 +29,7 @@ export class AppComponent implements OnInit {
   HouseLoanInt = 0;
   others = 0;
   leftOver = 0;
+  FC=0;
   netMonthlywithoutDeductions = 0;
   proTax = 200;
   gYTax = 0; gMTax = 0;
@@ -44,7 +45,7 @@ export class AppComponent implements OnInit {
   flag =0;
   ngOnInit() {
     this.SeniorCitizen = false;
-    this.flag =0;  
+    this.flag =0;
     this.CTCFunction();
   }
   checkFunction(){
@@ -65,6 +66,7 @@ export class AppComponent implements OnInit {
       - this.Gratiuty
       - this.basicPay
       - this.others
+      - this.FC
       - this.VPF;
     this.HRA = this.UHRA ? 0.4 * this.basicPay : this.HRA ;
     this.monthlyTakeHome = this.basicPay + this.leftOver + this.others;
@@ -81,7 +83,7 @@ export class AppComponent implements OnInit {
     }else{
       this.ynet = this.ynet-200000;
     }
-    if(this.MedicalInsurence<25000){
+    if(this.MedicalInsurence<=25000){
       this.ynet = this.ynet-this.MedicalInsurence;
     }else if(this.MedicalInsurence>25000){
       if(this.flag%2){
@@ -96,7 +98,7 @@ export class AppComponent implements OnInit {
     }
     this.case1 = this.HRA*12;
     this.case2 = (this.rentPaid*12)-(this.basicPay*12*0.1);
-    
+
     this.case3 = this.basicPay*12*0.4;
     this.eligibleHRA = Math.min(this.case1,this.case2,this.case3)
      this.ynet = this.ynet - this.eligibleHRA;
@@ -118,13 +120,13 @@ export class AppComponent implements OnInit {
       this.monthlyTakeHome = this.monthlyTakeHome - this.gMTax;
     }
     if (this.ynet > 1000000) {
-      this.gYTax = 12500 + 100000 + (this.ynet - 1000000) * 0.2;
+      this.gYTax = 12500 + 100000 + (this.ynet - 1000000) * 0.3;
       this.gMTax = this.gYTax / 12;
       this.monthlyTakeHome = this.monthlyTakeHome - this.gMTax;
     }
 
   }
-  
+
   reset() {
     this.UVP = true;
     this.UbasicPay = true;
@@ -139,6 +141,6 @@ export class AppComponent implements OnInit {
     this['U'+vName] = false;
     this.CTCFunction();
   }
-  
-  
+
+
 }
