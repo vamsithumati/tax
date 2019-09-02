@@ -14,9 +14,10 @@
   LIC:<input type="number" (keyup)="CTCFunction()" [(ngModel)]="LIC" />
   HouseLoanInt:<input type="number" (keyup)="CTCFunction()" [(ngModel)]="HouseLoanInt" />
   others:<input type="number" (keyup)="CTCFunction()" [(ngModel)]="others" /><br>
+  FoodCard:<input type="number" (keyup)="CTCFunction()" [(ngModel)]="FC" /><br>
   leftOver:<input type="number" (keyup)="calc()" [(ngModel)]="leftOver" />
   MedicalInsurence:<input type="number" (keyup)="CTCFunction()" [(ngModel)]="MedicalInsurence" />
-<input (click)="checkFunction()" type="checkbox" value = "true" [(ngModel)]="SeniorCitizen"/>the insurence includes senior citizen 
+<input (click)="checkFunction()" type="checkbox" value = "true" [(ngModel)]="SeniorCitizen"/>the insurence includes senior citizen
 
 </div>
 <div>
@@ -29,6 +30,7 @@
   case2---|<label>{{case2}}</label><br>
   case3---|<label>{{case3}}</label><br>
   D80C---|<label>{{150000-D80}}</label><br>
-  {{(monthlyTakeHome+gMTax+Gratiuty+EmployerPF+EmployeePF+VPF)*12+VP}}
+  {{(monthlyTakeHome+gMTax+Gratiuty+EmployerPF+EmployeePF+VPF+FC)*12+VP}}<br>
+  {{ynet}}
 </div>
 <router-outlet></router-outlet>
